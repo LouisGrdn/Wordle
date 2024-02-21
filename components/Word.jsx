@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { View, StyleSheet } from "react-native";
-import LetterCard from "./LetterCard";
+import GuessCard from "./GuessCard";
 
 export default function Word({word = ''}){
+
+    const numbers = Array.from({ length: 4 }, (_, index) => index);
     return (
         <View style={styles.container}>
-            
-            {word.split("").map((char, index) => (
-                <LetterCard letter={char}/>
+            {numbers.map((char, index) => (
+                <GuessCard key={index} letter={word[index] ? word[index] : ''}/>
             ))}
         </View>
     )
