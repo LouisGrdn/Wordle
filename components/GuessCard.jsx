@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import {View, Text, StyleSheet} from "react-native";
 
-export default function GuessCard({letter = ""}) {
+export default function GuessCard({letter = "", color = "white"}) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor:color}]}>
             <Text>{letter}</Text>
         </View>
     )
