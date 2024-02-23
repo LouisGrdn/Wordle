@@ -10,11 +10,17 @@ export default function Word({word = '', validate = false, answer = ""}){
             return 'white';
         }
         else {
-            return answer.toUpperCase().includes(word[index].toUpperCase()) ? 'green':'red';
+            if(answer.toUpperCase().includes(word[index].toUpperCase())){
+                if(answer[index].toUpperCase() == word[index].toUpperCase()){
+                    return 'green';
+                }
+                return 'orange';
+            }
+            return 'red';
         }
     }
-
-    const numbers = Array.from({ length: 4 }, (_, index) => index);
+    const numbers = Array.from({ length: answer.length }, (_, index) => index);
+    
     return (
         <View style={styles.container}>
             {numbers.map((char, index) => (
