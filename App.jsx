@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, SafeAreaView  } from 'react-native';
+import { View, StyleSheet, Text, SafeAreaView, StatusBar  } from 'react-native';
 import Word from './components/Word';
 import Keyboard from './components/Keyboard'
 import EndView from "./components/EndView"
-import { StatusBar } from 'expo-status-bar';
-import { createStackNavigator } from '@react-navigation/stack';
-import { HeaderTitle } from '@react-navigation/stack';
 
 const allWords = require("./words.json");
 const rand = Math.floor(Math.random() * allWords['mots'].length);
@@ -39,16 +36,6 @@ export default function App() {
     });
     answer = allWords['mots'][Math.floor(Math.random() * allWords['mots'].length)];
   };
-
-  const header = createStackNavigator({
-    header:{
-      navigationsOptions : {
-        headerStyle: {
-          backgroundColor: 'black',
-        }
-      }
-    }
-  })
   // End
   if(win || turn > answer.length) {
     return (
@@ -57,8 +44,6 @@ export default function App() {
   // Game
   } else {
     return (
-      <>
-       
         <View style={styles.container}>
           <StatusBar backgroundColor='black'/>
           <Text style={{fontSize: 50, fontWeight: 'bold', paddingBottom: 30}}>Wordle</Text>
@@ -69,7 +54,6 @@ export default function App() {
           </View>
           <View style={{flex: 1}}><Keyboard onChange={setWords} onValidate={() => onValidate()} words={words} turn={turn} answer={answer}/></View>
         </View>
-      </> 
     );
   }
 }
@@ -81,6 +65,5 @@ const styles = StyleSheet.create({
     marginTop: 80,
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#83c5be'
   }
 })
