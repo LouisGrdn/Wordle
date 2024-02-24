@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faDeleteLeft, faCheck } from '@fortawesome/free-solid-svg-icons'
 
-export default function Keyboard({onChange = null, onValidate = null, words = [], turn = 0}){
+export default function Keyboard({onChange = null, onValidate = null, words = [], turn = 0, answer = ""}){
     const alphabet = [
         'A', 'B', 'C', 'D',
         'E', 'F', 'G', 'H',
@@ -18,10 +18,13 @@ export default function Keyboard({onChange = null, onValidate = null, words = []
       onChange(words => {
         return words.map(word => {
           if(word.id === id){
-            return {...word, value: word.value+letter};
-          } else {
+            if(word.value.length < answer.length) {
+              return {...word, value: word.value+letter};
+            }
             return word;
+          
           }
+          return word;
         })
         })
     };
@@ -30,7 +33,6 @@ export default function Keyboard({onChange = null, onValidate = null, words = []
       onChange(words => {
         return words.map(word => {
           if(word.id === id){
-            console.log(word.value.slice(0, word.value.count-1));
             return {...word, value: word.value.slice(0, -1)};
           } else {
             return word;
@@ -42,7 +44,7 @@ export default function Keyboard({onChange = null, onValidate = null, words = []
     return (
         <View style={styles.container}>
           {alphabet.map((letter, index) => (
-            <TouchableOpacity onPress={() => onPress(turn, letter)} style={styles.item}>
+            <TouchableOpacity key={index} onPress={() => onPress(turn, letter)} style={styles.item}>
                 <Text style={styles.letter}>{letter}</Text>
             </TouchableOpacity>
           ))}
@@ -61,6 +63,7 @@ Keyboard.propTypes = {
   onValidate: PropTypes.func,
   words: PropTypes.array,
   turn: PropTypes.number,
+  answer: PropTypes.string,
 }
 
 const styles = StyleSheet.create({
@@ -78,6 +81,7 @@ const styles = StyleSheet.create({
       width: 50,
       borderRadius: 10,
       justifyContent: 'center',
+      backgroundColor: 'white'
     },
     letter: {
         alignSelf: 'center'
