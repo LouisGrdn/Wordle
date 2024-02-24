@@ -10,8 +10,8 @@ export default function Word({word = '', validate = false, answer = ""}){
             return 'white';
         }
         else {
-            if(answer.toUpperCase().includes(word[index].toUpperCase())){
-                if(answer[index].toUpperCase() == word[index].toUpperCase()){
+            if(answer.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(word[index].toUpperCase())){
+                if(answer[index].toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") == word[index].toUpperCase()){
                     return 'green';
                 }
                 return 'orange';
