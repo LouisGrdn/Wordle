@@ -46,7 +46,7 @@ export default function App() {
     return (
         <View style={styles.container}>
           <StatusBar backgroundColor='black'/>
-          <Text style={{fontSize: 50, fontWeight: 'bold', paddingBottom: 30}}>Wordle</Text>
+          <Text style={{fontSize: 50, fontWeight: 'bold', paddingBottom: 30, paddingTop: 80}}>Wordle</Text>
           <View style={{flex: 1}}>
           {words.map((word, index) => (
             <Word key={index} word={word.value} validate={index < turn} answer={answer}/>
@@ -61,9 +61,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: '100%',
-    marginTop: 80,
     flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor: '#83c5be'
   }
 })
