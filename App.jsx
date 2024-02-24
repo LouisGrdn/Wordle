@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, SafeAreaView  } from 'react-native';
 import Word from './components/Word';
 import Keyboard from './components/Keyboard'
+import EndView from "./components/EndView"
+import { StatusBar } from 'expo-status-bar';
+import { createStackNavigator } from '@react-navigation/stack';
+import { HeaderTitle } from '@react-navigation/stack';
+
+const allWords = require("./words.json");
+const rand = Math.floor(Math.random() * allWords['mots'].length);
+let answer = allWords['mots'][Math.floor(Math.random() * allWords['mots'].length)];
 
 export default function App() {
-  const answer = "Test";
   const [turn, setTurn] = useState(0);
   const [win, setWin] = useState(false);
   const [words, setWords] = useState(() => {
     const tab = [];
-    for(let i = 0; i < 6; i++){
+    for(let i = 0; i < answer.length+1; i++){
       tab.push({id: i, value: ''})
     }
     return tab;
@@ -17,27 +24,53 @@ export default function App() {
 
   function onValidate() {
     const word = words[turn];
-    if(word.toUpperCase() === answer.toUpperCase()) setWin(true);
-    else if(word.value.length == 4) setTurn(turn + 1);
+    if(word.value.toUpperCase() === answer.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) setWin(true);
+    else if(word.value.length == answer.length) setTurn(turn + 1);
   }
-  if(win) {
+  function onPress() {
+    setTurn(0);
+    setWin(false);
+    setWords(() => {
+      const tab = [];
+      for(let i = 0; i < answer.length+1; i++){
+        tab.push({id: i, value: ''})
+      }
+      return tab;
+    });
+    answer = allWords['mots'][Math.floor(Math.random() * allWords['mots'].length)];
+  };
+
+  const header = createStackNavigator({
+    header:{
+      navigationsOptions : {
+        headerStyle: {
+          backgroundColor: 'black',
+        }
+      }
+    }
+  })
+  // End
+  if(win || turn > answer.length) {
     return (
-      <View style={styles.container}>
-        <Text style={{fontSize: 50, fontWeight: 'bold', paddingBottom: 30}}>Wordle</Text>
-        <View style={{flex: 1}}>
-        {words.map((word, index) => (
-          <Word key={index} word={word.value} validate={index < turn} answer={answer}/>
-        ))}
-        </View>
-        <View style={{flex: 1}}><Keyboard onChange={setWords} onValidate={() => onValidate()} words={words} turn={turn}/></View>
-      </View>
-    );
-  } else {
-    return(
-      <View>
-        <Text></Text>
-      </View>
+      <EndView answer={answer} win={win} onPress={onPress}/>
     )
+  // Game
+  } else {
+    return (
+      <>
+       
+        <View style={styles.container}>
+          <StatusBar backgroundColor='black'/>
+          <Text style={{fontSize: 50, fontWeight: 'bold', paddingBottom: 30}}>Wordle</Text>
+          <View style={{flex: 1}}>
+          {words.map((word, index) => (
+            <Word key={index} word={word.value} validate={index < turn} answer={answer}/>
+          ))}
+          </View>
+          <View style={{flex: 1}}><Keyboard onChange={setWords} onValidate={() => onValidate()} words={words} turn={turn} answer={answer}/></View>
+        </View>
+      </> 
+    );
   }
 }
 
@@ -47,6 +80,7 @@ const styles = StyleSheet.create({
     height: '100%',
     marginTop: 80,
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#83c5be'
   }
 })
